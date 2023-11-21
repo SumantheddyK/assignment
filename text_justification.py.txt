@@ -1,0 +1,47 @@
+def justify_text(paragraph, page_width):
+    words = paragraph.split()
+    lines = []
+    current_line = ""
+    current_length = 0
+
+    for word in words:
+        if current_length + len(word) + len(current_line) > page_width:
+            lines.append(current_line)
+            current_line = ""
+            current_length = 0
+        if current_line:
+            current_line += " "
+            current_length += 1
+        current_line += word
+        current_length += len(word)
+
+    if current_line:
+        lines.append(current_line)
+
+    justified_lines = []
+    for line in lines:
+        if len(line.split()) > 1:
+            words_in_line = line.split()
+            spaces_to_add = page_width - sum(len(word) for word in words_in_line)
+            space_count = len(words_in_line) - 1
+            space_between_words = " " * (spaces_to_add // space_count)
+            extra_spaces = spaces_to_add % space_count
+            justified_line = ""
+            for i in range(len(words_in_line) - 1):
+                justified_line += words_in_line[i] + space_between_words
+                if extra_spaces > 0:
+                    justified_line += " "
+                    extra_spaces -= 1
+            justified_line += words_in_line[-1]
+        else:
+            justified_line = line.ljust(page_width)
+        justified_lines.append(justified_line)
+
+    return justified_lines
+
+# Example usage
+paragraph = "This is a sample text but a complicated problem to be solved, so we are adding more text to see that it actually works."
+page_width = 20
+justified_text = justify_text(paragraph, page_width)
+for idx, line in enumerate(justified_text):
+    print(f"Array [{idx + 1}] = \"{line}\"")
